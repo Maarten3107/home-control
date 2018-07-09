@@ -1,0 +1,1 @@
+sudo docker rm home-mysql

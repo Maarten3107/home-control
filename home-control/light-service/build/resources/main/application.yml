@@ -1,0 +1,19 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/light_service?useSSL=false
+        username: home-control
+        password: home-control
+        driverClassName: com.mysql.jdbc.Driver
+    boot:
+        admin:
+            context-path: bootAdmin
+            client:
+                enable: true
+                username: user
+                password: password
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
