@@ -7,7 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import org.joda.time.DateTime;
 
-@Entity
+//@Entity
 public class Membership implements Serializable {
     @Id
     /*@ManyToOne
@@ -21,10 +21,10 @@ public class Membership implements Serializable {
 
     private DateTime creationDate;
 
-    public Membership(final String lightId, final String groupId) {
+    /*public Membership(final String lightId, final String groupId) {
         this.lightId = lightId;
         this.groupId = groupId;
-    }
+    }*/
 
     public String getLightId() {
         return lightId;

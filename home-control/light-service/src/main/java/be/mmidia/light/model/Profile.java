@@ -4,16 +4,16 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+//@Entity
 public class Profile {
     @Id
     private String id;
     //private List<LightSetting> lightSettings;
     //private List<GroupSetting> groupSettings;
 
-    public Profile(String id) {
+    /*public Profile(String id) {
         this.id = id;
-    }
+    }*/
 
     /*public class LightSetting {
         private String id;

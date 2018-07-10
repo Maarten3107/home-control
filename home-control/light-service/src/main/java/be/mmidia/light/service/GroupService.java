@@ -9,13 +9,11 @@ import org.springframework.stereotype.Service;
 public interface GroupService {
     Group getGroupById(final String groupId);
 
-    Set<Group> getAllGroups();
+    List<Group> getAllGroups();
 
-    Set<Group> getGroupsByLightId(final String lightId);
+    List<Group> getGroupsByLightId(final String lightId);
 
-    void addGroup(final Group group);
-
-    void updateGroup(final Group group);
+    void createOrUpdateGroup(final Group group);
 
     void removeGroupById(final String groupId);
 

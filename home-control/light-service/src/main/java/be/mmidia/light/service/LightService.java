@@ -12,9 +12,7 @@ public interface LightService {
 
     Light getLightById(final String lightId);
 
-    void updateLight(final Light light);
-
-    void addLight(final Light light);
+    void createOrUpdateLight(final Light light);
 
     void removeLightById(final String lightId);
 
@@ -24,7 +22,7 @@ public interface LightService {
 
     void switchLight(final String lightId, final Light.State state);
 
-    Set<LightUsage> getAllUsagesOfLight(final String lightId);
+    List<LightUsage> getAllUsagesOfLight(final String lightId);
 
-    Set<Light> getActiveLigths();
+    List<Light> getActiveLigths();
 }

@@ -30,7 +30,7 @@ public class LightsController {
     private GroupService groupService;
 
     @RequestMapping("/")
-    public Set<Light> getAllLights() {
+    public List<Light> getAllLights() {
         LOGGER.debug("Getting all lights");
         return lightService.getAllLigths();
     }
@@ -42,7 +42,7 @@ public class LightsController {
     }
 
     @RequestMapping("/{lightId}/getGroups")
-    public Set<Group> getMemberships(@PathVariable("lightId") String lightId) {
+    public List<Group> getMemberships(@PathVariable("lightId") String lightId) {
         LOGGER.debug("Getting groups for light {}", lightId);
         return groupService.getGroupsByLightId(lightId);
     }
@@ -50,7 +50,7 @@ public class LightsController {
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> addLight(@RequestBody Light light) {
         LOGGER.debug("Adding light {}", light);
-        lightService.addLight(light);
+        lightService.createOrUpdateLight(light);
         return ResponseEntity.ok().build();
     }
 
@@ -77,13 +77,13 @@ public class LightsController {
     }
 
     @RequestMapping("/{lightId}/usage")
-    public Set<LightUsage> getUsageOfLight(@PathVariable("lightId") String lightId) {
+    public List<LightUsage> getUsageOfLight(@PathVariable("lightId") String lightId) {
         LOGGER.debug("Getting all usages of {}", lightId);
         return lightService.getAllUsagesOfLight(lightId);
     }
 
     @RequestMapping("/activity")
-    public Set<Light> getActiveLights() {
+    public List<Light> getActiveLights() {
         LOGGER.debug("Getting all active lights");
         return lightService.getActiveLigths();
     }

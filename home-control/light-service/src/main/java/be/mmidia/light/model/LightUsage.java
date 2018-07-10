@@ -15,11 +15,11 @@ public class LightUsage {
 
     private String lightId;
 
-    public LightUsage(final String lightId) {
+    /*public LightUsage(final String lightId) {
         this.id = UUID.randomUUID();
         this.startTime = DateTime.now();
         this.lightId = lightId;
-    }
+    }*/
 
     public UUID getId() {
         return id;

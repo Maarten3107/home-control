@@ -9,7 +9,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Configuration
 public class BeansConfig {
-    @Bean
+    /*@Bean
     public LocalSessionFactoryBean sessionFactory(final DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 
@@ -24,5 +24,5 @@ public class BeansConfig {
         sessionFactory.setHibernateProperties(hibernateProperties);
 
         return sessionFactory;
-    }
+    }*/
 }

@@ -20,10 +20,10 @@ public class Light {
     //@OneToMany(mappedBy = "light")
     //private Set<Membership> memberships;
 
-    public Light(final String id, final DateTime purchaseDate) {
+    /*public Light(final String id, final DateTime purchaseDate) {
         this.id = id;
         this.purchaseDate = purchaseDate;
-    }
+    }*/
 
     public String getId() {
         return id;

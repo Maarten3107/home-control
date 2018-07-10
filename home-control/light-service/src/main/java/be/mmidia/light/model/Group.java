@@ -20,18 +20,26 @@ public class Group {
 
 
     // TODO: Necessary?
-    public Group(String id) {
+    /*public Group(String id) {
         this.id = id;
         //this.memberships = new HashSet<>();
         this.creationDate = DateTime.now();
-    }
+    }*/
 
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public DateTime getCreationDate() {
         return creationDate;
+    }
+
+    public void setCreationDate(DateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     /*public Set<Membership> getMemberships() {

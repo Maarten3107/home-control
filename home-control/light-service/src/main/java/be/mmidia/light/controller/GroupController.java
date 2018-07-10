@@ -26,7 +26,7 @@ public class GroupController {
     private GroupService groupService;
 
     @RequestMapping("/")
-    public Set<Group> getAllGroups() {
+    public List<Group> getAllGroups() {
         LOGGER.debug("Getting all groups");
         return groupService.getAllGroups();
     }
@@ -40,7 +40,7 @@ public class GroupController {
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> addGroup(@RequestBody final Group group) {
         LOGGER.debug("Adding group {}", group);
-        groupService.addGroup(group);
+        groupService.createOrUpdateGroup(group);
         return ResponseEntity.ok().build();
     }
 
