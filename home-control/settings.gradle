@@ -1,3 +1,5 @@
 rootProject.name = 'home-control'
 include 'light-service'
+include 'phhue-service'
+include 'common'
 

@@ -1,15 +1,21 @@
-package be.mmidia.light.model;
+package be.mmidia.common.model;
 
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+/*import javax.persistence.Entity;
+import javax.persistence.Id;*/
+import org.joda.time.DateTime;
 
-@Entity
+//@Entity
 public class HueConnection {
-    @Id
+    //@Id
     private UUID id;
     private String username;
     private String lastConnectedIP;
+    private DateTime connectionStarted;
+
+    public UUID getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;
@@ -25,5 +31,13 @@ public class HueConnection {
 
     public void setLastConnectedIP(String lastConnectedIP) {
         this.lastConnectedIP = lastConnectedIP;
+    }
+
+    public DateTime getConnectionStarted() {
+        return connectionStarted;
+    }
+
+    public void setConnectionStarted(DateTime connectionStarted) {
+        this.connectionStarted = connectionStarted;
     }
 }

@@ -4,9 +4,8 @@ import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.model.LightUsage;
 import be.mmidia.light.service.GroupService;
-import be.mmidia.light.service.LightsService;
+import be.mmidia.light.service.LightService;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,24 +25,24 @@ public class LightsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LightsController.class);
 
     @Autowired
-    private LightsService lightsService;
+    private LightService lightService;
     @Autowired
     private GroupService groupService;
 
     @RequestMapping("/")
     public Set<Light> getAllLights() {
         LOGGER.debug("Getting all lights");
-        return lightsService.getAllLigths();
+        return lightService.getAllLigths();
     }
 
     @RequestMapping("/{lightId}")
     public Light getLight(@PathVariable String lightId) {
         LOGGER.debug("Getting light {}", lightId);
-        return lightsService.getLightById(lightId);
+        return lightService.getLightById(lightId);
     }
 
     @RequestMapping("/{lightId}/getGroups")
-    public List<Group> getMemberships(@PathVariable("lightId") String lightId) {
+    public Set<Group> getMemberships(@PathVariable("lightId") String lightId) {
         LOGGER.debug("Getting groups for light {}", lightId);
         return groupService.getGroupsByLightId(lightId);
     }
@@ -51,14 +50,14 @@ public class LightsController {
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> addLight(@RequestBody Light light) {
         LOGGER.debug("Adding light {}", light);
-        lightsService.addLight(light);
+        lightService.addLight(light);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/{lightId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeLight(@PathVariable(value="lightId") String lightId){
         LOGGER.debug("Removing light {}", lightId);
-        lightsService.removeLightById(lightId);
+        lightService.removeLightById(lightId);
         return ResponseEntity.ok().build();
     }
 
@@ -66,26 +65,26 @@ public class LightsController {
     public ResponseEntity<?> switchLight(@PathVariable(value="lightId") String lightId,
                                          @RequestParam Light.State state) {
         LOGGER.debug("Switching light {} {}", lightId, state);
-        lightsService.switchLight(lightId, state);
+        lightService.switchLight(lightId, state);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping("/switchAll")
     public ResponseEntity<?> switchOffAllLights() {
         LOGGER.debug("Switching of all lights");
-        lightsService.switchOffAllLights();
+        lightService.switchOffAllLights();
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping("/{lightId}/usage")
     public Set<LightUsage> getUsageOfLight(@PathVariable("lightId") String lightId) {
         LOGGER.debug("Getting all usages of {}", lightId);
-        return lightsService.getAllUsagesOfLight(lightId);
+        return lightService.getAllUsagesOfLight(lightId);
     }
 
-    @RequestMapping("/Activity")
+    @RequestMapping("/activity")
     public Set<Light> getActiveLights() {
         LOGGER.debug("Getting all active lights");
-        return lightsService.getActiveLigths();
+        return lightService.getActiveLigths();
     }
 }

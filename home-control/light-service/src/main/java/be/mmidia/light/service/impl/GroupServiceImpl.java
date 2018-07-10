@@ -4,8 +4,9 @@ import be.mmidia.light.dao.GroupDao;
 import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.service.GroupService;
-import be.mmidia.light.service.LightsService;
+import be.mmidia.light.service.LightService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupDao groupDao;
     @Autowired
-    private LightsService lightsService;
+    private LightService lightService;
 
     @Override
     public Group getGroupById(String groupId) {
@@ -22,12 +23,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Group> getGroupsByLightId(String lightId) {
+    public Set<Group> getGroupsByLightId(String lightId) {
         return groupDao.fetchGroupsByLightId(lightId);
     }
 
     @Override
-    public List<Group> getAllGroups() {
+    public Set<Group> getAllGroups() {
         return groupDao.fetchAllGroups();
     }
 
@@ -49,7 +50,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void addLightToGroup(String lightId, String groupId) {
         Group group = groupDao.fetchGroupById(groupId);
-        Light light = lightsService.getLightById(lightId);
+        Light light = lightService.getLightById(lightId);
         if (light != null) {
             //group.addMember(light);
         }
@@ -66,7 +67,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void switchGroupOfLigths(String groupId, Light.State state) {
         Group group = this.getGroupById(groupId);
-        //group.getMembers().forEach((id, light) -> lightsService.switchLight(id, state));
+        //group.getMembers().forEach((id, light) -> lightService.switchLight(id, state));
         /*//groupDao.updateGroup(group);*/
     }
 }

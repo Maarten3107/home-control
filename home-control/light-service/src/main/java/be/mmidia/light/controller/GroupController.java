@@ -4,6 +4,7 @@ import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.service.GroupService;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class GroupController {
     private GroupService groupService;
 
     @RequestMapping("/")
-    public List<Group> getAllGroups() {
+    public Set<Group> getAllGroups() {
         LOGGER.debug("Getting all groups");
         return groupService.getAllGroups();
     }

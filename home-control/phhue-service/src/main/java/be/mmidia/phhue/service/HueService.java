@@ -1,4 +1,4 @@
-package be.mmidia.light.service;
+package be.mmidia.phhue.service;
 
 public interface HueService {
 }

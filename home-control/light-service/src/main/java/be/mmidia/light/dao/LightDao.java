@@ -1,22 +1,30 @@
 package be.mmidia.light.dao;
 
 import be.mmidia.light.model.Light;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
-import org.springframework.stereotype.Repository;
 
-public interface LightDao {
-    Set<Light> fetchAllLights();
+public interface LightDao <Light>/* extends JpaRepository<Light, String>*/ {
+    List<Light> findAll();
 
-    Light fetchLightById(String lightId);
+    Light getOne(String id);
 
-    Set<Light> fetchLightsByState(Light.State state);
+    Set<Light> findByState(be.mmidia.light.model.Light.State state);
 
     void updateLight(Light light);
 
-    void batchUpdateLight(Map<String, Light> lightList);
+    void removeLightById(String id);
 
-    void removeLight(String lightId);
+    //List<Light> findAll();
 
-    String addLight(Light light);
+    //Light getOne(final String lightId);
+
+    /*@Query("select l from light l where l.state = :state")
+    Set<Light> findByState(@Param("state") final Light.State state);*/
+
+    //void updateLight(Light light);
+
+    //void removeLightById(String lightId);
+
+    //String addLight(Light light);
 }

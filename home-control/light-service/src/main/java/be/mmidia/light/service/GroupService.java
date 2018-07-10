@@ -3,14 +3,15 @@ package be.mmidia.light.service;
 import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 public interface GroupService {
     Group getGroupById(final String groupId);
 
-    List<Group> getAllGroups();
+    Set<Group> getAllGroups();
 
-    List<Group> getGroupsByLightId(final String lightId);
+    Set<Group> getGroupsByLightId(final String lightId);
 
     void addGroup(final Group group);
 

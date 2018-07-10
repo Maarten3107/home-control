@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 
-public interface LightsService {
-    Set<Light> getAllLigths();
+public interface LightService {
+    List<Light> getAllLigths();
 
     Light getLightById(final String lightId);
 

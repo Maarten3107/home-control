@@ -1,0 +1,3 @@
+hue:
+    api:
+        url: http://<bridge ip address>/api

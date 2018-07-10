@@ -1,19 +1,15 @@
-package be.mmidia.light.service.impl;
+package be.mmidia.phhue.service.impl;
 
-import be.mmidia.light.controller.LightsController;
-import be.mmidia.light.dao.HueConnectionDao;
-import be.mmidia.light.exception.BridgeConnectionFailedException;
-import be.mmidia.light.model.HueConnection;
-import be.mmidia.light.service.HueService;
+// import be.mmidia.light.dao.HueConnectionDao;
+import be.mmidia.common.model.HueConnection;
+import be.mmidia.phhue.service.HueService;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
-import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHMessageType;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
-import com.philips.lighting.model.PHLightState;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +23,8 @@ public class HueServiceImpl implements HueService {
 
     private HueConnection hueConnection;
 
-    @Autowired
-    private HueConnectionDao hueConnectionDao;
+    /*@Autowired
+    private HueConnectionDao hueConnectionDao;*/
 
     public PHAccessPoint getBridgeConnection(){
         if(accessPoint == null){
@@ -40,8 +36,22 @@ public class HueServiceImpl implements HueService {
         return accessPoint;
     }
 
-    public PHLightState getLightState() {
-        
+    public boolean connectToLastKnownAccessPoint(final String username) {
+        /*String username = HueProperties.getUsername();
+        String lastIpAddress =  HueProperties.getLastConnectedIP();*/
+
+        /*if (username==null || lastIpAddress == null) {
+            desktopView.showDialog("Missing Last Username or Last IP.  Last known connection not found.");
+            return false;
+        }*/
+
+//        HueConnection lastConnection = hueConnectionDao.fetchLastConnectionForUsername(username);
+//
+//        PHAccessPoint accessPoint = new PHAccessPoint();
+//        accessPoint.setIpAddress(lastConnection.getLastConnectedIP());
+//        accessPoint.setUsername(username);
+//        phHueSDK.connect(accessPoint);
+        return true;
     }
 
     private PHSDKListener listener = new PHSDKListener() {
@@ -78,7 +88,7 @@ public class HueServiceImpl implements HueService {
             hueConnection = new HueConnection();
             hueConnection.setUsername(username);
             hueConnection.setLastConnectedIP(lastIpAddress);
-            hueConnectionDao.createConnection(hueConnection);
+//            hueConnectionDao.createConnection(hueConnection);
 
             /*HueProperties.storeUsername(username);
             HueProperties.storeLastIPAddress(lastIpAddress);

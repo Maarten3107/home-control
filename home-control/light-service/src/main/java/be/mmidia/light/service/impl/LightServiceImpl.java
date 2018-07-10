@@ -4,57 +4,79 @@ import be.mmidia.light.dao.LightDao;
 import be.mmidia.light.dao.LightUsageDao;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.model.LightUsage;
-import be.mmidia.light.service.LightsService;
+import be.mmidia.light.service.LightService;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.swing.text.html.Option;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LightServiceImpl implements LightsService{
+public class LightServiceImpl implements LightService {
     @Autowired
     private LightDao lightDao;
     @Autowired
     private LightUsageDao lightUsageDao;
 
+    @Autowired
+    private EntityManager entityManager;
+
+
     @Override
-    public Set<Light> getAllLigths() {
-        return lightDao.fetchAllLights();
+    public List<Light> getAllLigths() {
+        return lightDao.findAll();
     }
 
     @Override
     public Light getLightById(final String lightId) {
-        return lightDao.fetchLightById(lightId);
+        return lightDao.getOne(lightId);
     }
 
     @Override
     public void addLight(final Light light) {
-        lightDao.addLight(light);
+        lightDao.save(light);
+        //lightDao.addLight(light);
     }
 
     @Override
     public void updateLight(final Light light) {
-        lightDao.updateLight(light);
+//        Light light1 = (Light)
+
+        EntityManager entityManager = Persistence.createEntityManagerFactory("")
+
+        Light light1 = lightDao.getOne(light.getId());
+        if(light1 != null) {
+            entit
+            light.
+            lightDao.
+        }
+        lightDao.save(light);
     }
 
     @Override
     public void removeLightById(final String lightId) {
-        lightDao.removeLight(lightId);
+        lightDao.removeLightById(lightId);
     }
 
     @Override
     public void switchOffAllLights() {
-        Map<String, Light> lights = lightDao.fetchAllLights().stream().collect(Collectors.toMap(Light::getId, e -> e));
+        Map<String, Light> lights = lightDao.findAll().stream().collect(Collectors.toMap(Light::getId, e -> e));
         lights.forEach((lightId, light) -> switchLight(light, Light.State.OFF));
     }
 
     @Override
     public void switchLight(final String lightId, final Light.State state) {
         if (lightId != null && state != null) {
-            Light light = lightDao.fetchLightById(lightId);
-            switchLight(light, state);
+            Light light = lightDao.getOne(lightId);
+            if(light != null) {
+                switchLight(light, state);
+            }
         }
     }
 
@@ -72,7 +94,7 @@ public class LightServiceImpl implements LightsService{
 
     @Override
     public Set<Light> getActiveLigths() {
-        return lightDao.fetchLightsByState();
+        return lightDao.findByState(Light.State.ON);
     }
 
     private void startStopUsage(final Light light, final Light.State state) {
@@ -87,6 +109,7 @@ public class LightServiceImpl implements LightsService{
         }
 
         light.setState(state);
-        lightDao.updateLight(light);
+        lightDao.save(light);
+        //lightDao.updateLight(light);
     }
 }
