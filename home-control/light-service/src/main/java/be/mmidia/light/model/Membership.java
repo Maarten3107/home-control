@@ -5,19 +5,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.joda.time.DateTime;
 
-//@Entity
+/*@Entity
+@Getter
+@Setter
+@Table(name = "membership")*/
 public class Membership implements Serializable {
     @Id
-    /*@ManyToOne
-    @JoinColumn*/
-    private String lightId;
+    //@ManyToOne(targetEntity = Light.class)
+    private long lightId;
 
     @Id
-    /*@ManyToOne
-    @JoinColumn*/
-    private String groupId;
+    //@ManyToOne(targetEntity = Group.class)
+    private long groupId;
 
     private DateTime creationDate;
 
@@ -25,28 +29,4 @@ public class Membership implements Serializable {
         this.lightId = lightId;
         this.groupId = groupId;
     }*/
-
-    public String getLightId() {
-        return lightId;
-    }
-
-    public void setLightId(String lightId) {
-        this.lightId = lightId;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public DateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(DateTime creationDate) {
-        this.creationDate = creationDate;
-    }
 }

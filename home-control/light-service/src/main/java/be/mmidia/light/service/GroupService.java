@@ -7,19 +7,21 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 public interface GroupService {
-    Group getGroupById(final String groupId);
+    Group getGroupById(final long groupId);
 
     List<Group> getAllGroups();
 
-    List<Group> getGroupsByLightId(final String lightId);
+    List<Group> getGroupsByLightId(final long lightId);
 
     void createOrUpdateGroup(final Group group);
 
-    void removeGroupById(final String groupId);
+    void removeGroupById(final long groupId);
 
-    void addLightToGroup(final String lightId, final String groupId);
+    List<Light> getMembers(final long groupId);
 
-    void removeLightFromGroup(final String lightId, final String groupId);
+    void addLightToGroup(final long lightId, final long groupId);
 
-    void switchGroupOfLigths(final String groupId, Light.State state);
+    void removeLightFromGroup(final long lightId, final long groupId);
+
+    void switchGroupOfLigths(final long groupId, Light.State state);
 }

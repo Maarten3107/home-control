@@ -3,6 +3,7 @@ package be.mmidia.light.service.impl;
 import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.repository.GroupRepository;
+import be.mmidia.light.repository.LightRepository;
 import be.mmidia.light.service.GroupService;
 import be.mmidia.light.service.LightService;
 import java.util.List;
@@ -13,17 +14,24 @@ import org.springframework.stereotype.Service;
 public class GroupServiceImpl implements GroupService {
     /*@Autowired
     private LightService lightService;*/
-    @Autowired
+
     private GroupRepository groupRepository;
+    private LightRepository lightRepository;
+
+    public GroupServiceImpl(GroupRepository groupRepository, LightRepository lightRepository) {
+        this.groupRepository = groupRepository;
+        this.lightRepository = lightRepository;
+    }
 
     @Override
-    public Group getGroupById(String groupId) {
+    public Group getGroupById(final long groupId) {
         return groupRepository.findById(groupId).orElse(null);
     }
 
     @Override
-    public List<Group> getGroupsByLightId(String lightId) {
-        return groupRepository.findAllByLightId(lightId);
+    public List<Group> getGroupsByLightId(final long lightId) {
+        //return groupRepository.findAllByLightId(lightId);
+        return null;
     }
 
     @Override
@@ -37,29 +45,48 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void removeGroupById(String groupId) {
+    public void removeGroupById(final long groupId) {
         groupRepository.deleteById(groupId);
     }
 
     @Override
-    public void addLightToGroup(String lightId, String groupId) {
-        /*Group group = groupDao.fetchGroupById(groupId);
-        Light light = lightService.getLightById(lightId);
-        if (light != null) {
-            //group.addMember(light);
+    public List<Light> getMembers(long groupId) {
+        Group group = groupRepository.findById(groupId).orElse(null);
+        List<Light> lights = null;
+        if(group != null) {
+            lights = group.getLights();
         }
-        groupDao.updateGroup(group);*/
+        return lights;
     }
 
     @Override
-    public void removeLightFromGroup(String lightId, String groupId) {
+    public void addLightToGroup(final long lightId, final long groupId) {
+        Group group = groupRepository.findById(groupId).orElse(null);
+        Light light = lightRepository.findById(lightId).orElse(null);
+        if(group != null && light != null) {
+            group.addLight(light);
+            groupRepository.save(group);
+            lightRepository.save(light);
+        }
+    }
+
+    @Override
+    public void removeLightFromGroup(final long lightId, final long groupId) {
+        Group group = groupRepository.findById(groupId).orElse(null);
+        Light light = lightRepository.findById(lightId).orElse(null);
+        if(group != null && light != null) {
+            group.removeLight(light);
+            groupRepository.save(group);
+            lightRepository.save(light);
+        }
+
         /*Group group = groupDao.fetchGroupById(groupId);
         //group.removeMember(lightId);
         groupDao.updateGroup(group);*/
     }
 
     @Override
-    public void switchGroupOfLigths(String groupId, Light.State state) {
+    public void switchGroupOfLigths(final long groupId, final Light.State state) {
         Group group = groupRepository.findById(groupId).orElse(null);
 
         /*if(group != null) {

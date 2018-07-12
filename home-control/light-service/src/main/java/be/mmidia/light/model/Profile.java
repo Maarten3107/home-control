@@ -1,11 +1,16 @@
 package be.mmidia.light.model;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 //@Entity
-public class Profile {
+@Getter
+@Setter
+public class Profile implements Serializable {
     @Id
     private String id;
     //private List<LightSetting> lightSettings;

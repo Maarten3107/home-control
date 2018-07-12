@@ -7,6 +7,7 @@ import be.mmidia.light.service.GroupService;
 import be.mmidia.light.service.LightService;
 import java.util.List;
 import java.util.Set;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class LightsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LightsController.class);
 
-    @Autowired
     private LightService lightService;
-    @Autowired
     private GroupService groupService;
+
+    public LightsController(LightService lightService, GroupService groupService) {
+        this.lightService = lightService;
+        this.groupService = groupService;
+    }
 
     @RequestMapping("/")
     public List<Light> getAllLights() {
@@ -36,34 +40,34 @@ public class LightsController {
     }
 
     @RequestMapping("/{lightId}")
-    public Light getLight(@PathVariable String lightId) {
+    public Light getLight(@PathVariable("lightId") final long lightId) throws NotFoundException {
         LOGGER.debug("Getting light {}", lightId);
         return lightService.getLightById(lightId);
     }
 
     @RequestMapping("/{lightId}/getGroups")
-    public List<Group> getMemberships(@PathVariable("lightId") String lightId) {
+    public List<Group> getMemberships(@PathVariable("lightId") final long lightId) {
         LOGGER.debug("Getting groups for light {}", lightId);
         return groupService.getGroupsByLightId(lightId);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> addLight(@RequestBody Light light) {
-        LOGGER.debug("Adding light {}", light);
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> createOrUpdateLight(@RequestBody final Light light) {
+        LOGGER.debug("Adding or updating light {}", light);
         lightService.createOrUpdateLight(light);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/{lightId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> removeLight(@PathVariable(value="lightId") String lightId){
+    public ResponseEntity<?> removeLight(@PathVariable("lightId") final long lightId){
         LOGGER.debug("Removing light {}", lightId);
         lightService.removeLightById(lightId);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping("/{lightId}/switch")
-    public ResponseEntity<?> switchLight(@PathVariable(value="lightId") String lightId,
-                                         @RequestParam Light.State state) {
+    @RequestMapping("/{lightId}/switch/{state}")
+    public ResponseEntity<?> switchLight(@PathVariable("lightId") final long lightId,
+                                         @PathVariable("state") Light.State state) {
         LOGGER.debug("Switching light {} {}", lightId, state);
         lightService.switchLight(lightId, state);
         return ResponseEntity.ok().build();
@@ -77,7 +81,7 @@ public class LightsController {
     }
 
     @RequestMapping("/{lightId}/usage")
-    public List<LightUsage> getUsageOfLight(@PathVariable("lightId") String lightId) {
+    public List<LightUsage> getUsageOfLight(@PathVariable("lightId") final long lightId) {
         LOGGER.debug("Getting all usages of {}", lightId);
         return lightService.getAllUsagesOfLight(lightId);
     }

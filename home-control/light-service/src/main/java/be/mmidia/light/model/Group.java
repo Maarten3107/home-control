@@ -1,77 +1,67 @@
 package be.mmidia.light.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import org.joda.time.DateTime;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class Group {
+@Getter
+@Setter
+@EqualsAndHashCode
+@Table(name = "\"group\"")
+public class Group implements Serializable {
     @Id
-    private String id;
+    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    private DateTime creationDate;
+    @NaturalId
+    @Column(length = 25, unique = true, nullable = false)
+    private String name;
 
-    //@OneToMany(mappedBy = "group")
-    //private Set<Membership> memberships;
-    //private Map<String, Light> members;
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp creationDate;
 
+    @JsonIgnore
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "membership",
+            joinColumns = @JoinColumn(name = "groupId"),
+            inverseJoinColumns = @JoinColumn(name = "lightId")
+    )
+    private List<Light> lights = new ArrayList<>();
 
-    // TODO: Necessary?
-    /*public Group(String id) {
-        this.id = id;
-        //this.memberships = new HashSet<>();
-        this.creationDate = DateTime.now();
-    }*/
+    public Group() { }
 
-    public String getId() {
-        return id;
+    public Group(String name) {
+        this.name = name;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void addLight(final Light light) {
+        lights.add(light);
+        light.getGroups().add(this);
     }
 
-    public DateTime getCreationDate() {
-        return creationDate;
+    public void removeLight(final Light light) {
+        lights.remove(light);
+        light.getGroups().remove(this);
     }
-
-    public void setCreationDate(DateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    /*public Set<Membership> getMemberships() {
-        return memberships;
-    }*/
-
-    /*public Set<Membership> addMember(final String lightId){
-        memberships.add(new Membership(lightId, ))
-    }*/
-
-    /*public Map<String, Light> getMembers() {
-        return members;
-    }
-
-    public Map<String, Light> addMember(Light light) {
-        if(null != light && !members.containsKey(light.getId())) {
-            members.put(light.getId(), light);
-        }
-        return members;
-    }
-
-    public Map<String, Light> removeMember(Light light) {
-        if(light != null) {
-            removeMember(light.getId());
-        }
-        return members;
-    }
-
-    public Map<String, Light> removeMember(final String lightId) {
-        if(lightId != null && members.containsKey(lightId)) {
-            members.remove(lightId);
-        }
-        return members;
-    }*/
 }

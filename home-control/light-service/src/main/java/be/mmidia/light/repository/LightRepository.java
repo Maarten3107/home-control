@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LightRepository extends JpaRepository<Light, String> {
+public interface LightRepository extends JpaRepository<Light, Long> {
     List<Light> findByState(Light.State state);
 }

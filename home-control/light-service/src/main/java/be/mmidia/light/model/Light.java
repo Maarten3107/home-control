@@ -1,83 +1,67 @@
 package be.mmidia.light.model;
 
-import java.util.Set;
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import org.joda.time.DateTime;
+import javax.persistence.ManyToMany;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class Light {
+@Getter
+@Setter
+@EqualsAndHashCode
+public class Light implements Serializable {
     @Id
-    private String id;
+    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NaturalId
+    @Column(length = 25, unique = true, nullable = false)
+    private String name;
+
+    @Column(length = 60)
     private String brandAndType;
-    private DateTime purchaseDate;
-    private DateTime inUseSince;
-    private UUID lastUsage;
+
+    private Date purchaseDate;
+
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp inUseSince;
+
+    @Column(length = 10)
+    @Enumerated(EnumType.STRING)
     private State state;
 
-    //@OneToMany(mappedBy = "light")
-    //private Set<Membership> memberships;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "lights")
+    private List<Group> groups = new ArrayList<>();
 
-    /*public Light(final String id, final DateTime purchaseDate) {
-        this.id = id;
-        this.purchaseDate = purchaseDate;
-    }*/
+    public Light() { }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getBrandAndType() {
-        return brandAndType;
-    }
-
-    public void setBrandAndType(String brandAndType) {
+    public Light(String name, String brandAndType, Date purchaseDate, State state) {
+        this.name = name;
         this.brandAndType = brandAndType;
-    }
-
-    public DateTime getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(DateTime purchaseDate) {
         this.purchaseDate = purchaseDate;
-    }
-
-    public DateTime getInUseSince() {
-        return inUseSince;
-    }
-
-    public void setInUseSince(DateTime inUseSince) {
-        this.inUseSince = inUseSince;
-    }
-
-    public UUID getLastUsage() {
-        return lastUsage;
-    }
-
-    public void setLastUsage(UUID lastUsage) {
-        this.lastUsage = lastUsage;
-    }
-
-    /*public Set<Membership> getMemberships() {
-        return memberships;
-    }
-
-    public void setMemberships(Set<Membership> memberships) {
-        this.memberships = memberships;
-    }*/
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
         this.state = state;
     }
 

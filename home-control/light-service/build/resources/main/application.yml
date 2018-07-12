@@ -4,6 +4,13 @@ spring:
         username: home-control
         password: home-control
         driverClassName: com.mysql.jdbc.Driver
+        hikari:
+            connection-timeout: 60000
+            maximum-pool-size: 5
+    jpa:
+        hibernate:
+            ddl-auto: none
+            dialect: org.hibernate.dialect.MySQL57Dialect
     boot:
         admin:
             context-path: bootAdmin

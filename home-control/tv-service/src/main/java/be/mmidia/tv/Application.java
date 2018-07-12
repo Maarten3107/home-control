@@ -1,4 +1,4 @@
-package be.mmidia.common;
+package be.mmidia.tv;
 
 public class Application {
 }
