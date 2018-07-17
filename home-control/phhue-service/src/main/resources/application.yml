@@ -1,3 +1,16 @@
 hue:
     api:
         url: http://<bridge ip address>/api
+    remote:
+        authentication:
+            userAuthorizationUri: https://api.meethue.com/oauth2/auth
+            accessTokenUri: https://api.meethue.com/oauth2/token
+            clientId: y8K6eWB5BSSFXr30IXdVLOOmo3slmYzO
+            clientSecret: k8x32VzuRF8jmzyd
+            tokenName: oauth_token
+            appId: homecontrol
+            deviceId: testHC
+            state: 12345
+            callbackUrl: localhost:8080
+        api:
+            url: https://api.meethue.com/bridge

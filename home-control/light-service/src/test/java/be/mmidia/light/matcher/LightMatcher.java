@@ -1,7 +1,6 @@
 package be.mmidia.light.matcher;
 
 import be.mmidia.light.model.Light;
-import be.mmidia.light.model.Membership;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

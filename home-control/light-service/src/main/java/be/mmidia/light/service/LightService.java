@@ -20,8 +20,6 @@ public interface LightService {
 
     void switchOffAllLights();
 
-    void switchGroupOfLights(final long groupId, final Light.State state);
-
     void switchLight(final Light light, final Light.State state);
 
     void switchLight(final long lightId, final Light.State state);

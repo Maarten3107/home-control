@@ -1,14 +1,12 @@
 package be.mmidia.light.service.impl;
 
-import be.mmidia.light.model.Group;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.model.LightUsage;
 import be.mmidia.light.repository.LightRepository;
 import be.mmidia.light.repository.LightUsageRepository;
-import be.mmidia.light.service.GroupService;
 import be.mmidia.light.service.LightService;
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.ListIterator;
 import javassist.NotFoundException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -21,12 +19,10 @@ public class LightServiceImpl implements LightService {
 
     private LightRepository lightRepository;
     private LightUsageRepository lightUsageRepository;
-    private GroupService groupService;
 
-    public LightServiceImpl(final LightRepository lightRepository, final LightUsageRepository lightUsageRepository, final GroupService groupService) {
+    public LightServiceImpl(final LightRepository lightRepository, final LightUsageRepository lightUsageRepository) {
         this.lightRepository = lightRepository;
         this.lightUsageRepository = lightUsageRepository;
-        this.groupService = groupService;
     }
 
     @Override
@@ -51,13 +47,8 @@ public class LightServiceImpl implements LightService {
 
     @Override
     public void switchOffAllLights() {
-        //lightRepository.findAll().forEach(light -> switchLight(light, Light.State.OFF));
-        getActiveLigths().forEach(light -> switchLight(light, Light.State.OFF));
-    }
-
-    @Override
-    public void switchGroupOfLights(long groupId, Light.State state) {
-        groupService.getMembers(groupId).forEach(member -> switchLight(member, state));
+        List<Light> activeLights = getActiveLigths();
+        activeLights.forEach(light -> switchLight(light, Light.State.OFF));
     }
 
     @Override
@@ -77,7 +68,8 @@ public class LightServiceImpl implements LightService {
 
     @Override
     public List<Light> getActiveLigths() {
-        return lightRepository.findByState(Light.State.ON);
+        List<Light> activeLights = lightRepository.findByState(Light.State.ON);
+        return activeLights;
     }
 
     @Override
@@ -88,36 +80,24 @@ public class LightServiceImpl implements LightService {
     private void startStopUsage(final Light light, final Light.State state) {
         // Todo: Update LightUsage anomalities
         if (light != null && !light.getState().equals(state)) {
-            if (state == Light.State.ON) {
-                //LightUsage lightUsage = lightUsageRepository.findById(light.getLastUsage().getId()).orElse(null);
-                LightUsage lightUsage = lightUsageRepository.findLastUsageById(light.getId()).orElse(null);
+            if (state == Light.State.OFF) {
+                LightUsage lightUsage = lightUsageRepository.findLastUsageByLightId(light.getId()).orElse(null);
                 if (lightUsage != null) {
-                    lightUsage.setEndTime(DateTime.now());
+                    lightUsage.setEndTime(new Timestamp(DateTime.now().getMillis()));
                     lightUsageRepository.save(lightUsage);
                     light.setState(state);
                     lightRepository.save(light);
                 } else {
                     LOGGER.error("{} is recorded as ON while no record was found in database", light.getName());
                 }
-            } else if (state == Light.State.OFF) {
-                lightUsageRepository.save(new LightUsage());
+            } else if (state == Light.State.ON) {
+                LightUsage lightUsage = new LightUsage();
+                lightUsage.setLight(light);
+                lightUsageRepository.save(lightUsage);
+
                 light.setState(state);
                 lightRepository.save(light);
             }
         }
-
-        /*if(state == Light.State.ON) {
-            LightUsage lightUsage = lightUsageDao.getUsageByLightUsageId(light.getLastUsage());
-            lightUsage.setEndTime(DateTime.now());
-            lightUsageDao.updateUsage(lightUsage);
-        } else if (state == Light.State.OFF) {
-            LightUsage lightUsage = new LightUsage(light.getId());
-            lightUsageDao.createUsage(lightUsage);
-            light.setLastUsage(lightUsage.getId());
-        }
-
-        light.setState(state);
-        lightDao.save(light);*/
-        //lightDao.updateLight(light);
     }
 }

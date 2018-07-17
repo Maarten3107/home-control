@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface LightUsageRepository extends JpaRepository<LightUsage, Long> {
     List<LightUsage> findByLightId(final Long lightId);
 
-    @Query("select lu from LightUsage lu where lu.lightId = :lightId and lu.startTime = (select max(ll.startTime) from LightUsage ll where ll.lightId = :lightId and end_time is null)")
-    Optional<LightUsage> findLastUsageById(final Long lightId);
-
-    /*@Query("select lu from LightUsage lu where lightId = :lightId")
-    List<LightUsage> findUsagesById(String lightId);*/
+    @Query("select lu1 from LightUsage lu1 where lu1.light.id = :lightId and lu1.startTime = (select max(lu2.startTime) from LightUsage lu2 where lu2.light.id = :lightId and lu2.endTime is null)")
+    Optional<LightUsage> findLastUsageByLightId(final Long lightId);
 }

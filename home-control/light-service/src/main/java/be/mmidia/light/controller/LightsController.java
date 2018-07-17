@@ -1,23 +1,20 @@
 package be.mmidia.light.controller;
 
-import be.mmidia.light.model.Group;
+import be.mmidia.light.model.Room;
 import be.mmidia.light.model.Light;
 import be.mmidia.light.model.LightUsage;
-import be.mmidia.light.service.GroupService;
+import be.mmidia.light.service.RoomService;
 import be.mmidia.light.service.LightService;
 import java.util.List;
-import java.util.Set;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,11 +23,9 @@ public class LightsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LightsController.class);
 
     private LightService lightService;
-    private GroupService groupService;
 
-    public LightsController(LightService lightService, GroupService groupService) {
+    public LightsController(LightService lightService) {
         this.lightService = lightService;
-        this.groupService = groupService;
     }
 
     @RequestMapping("/")
@@ -45,11 +40,11 @@ public class LightsController {
         return lightService.getLightById(lightId);
     }
 
-    @RequestMapping("/{lightId}/getGroups")
-    public List<Group> getMemberships(@PathVariable("lightId") final long lightId) {
-        LOGGER.debug("Getting groups for light {}", lightId);
-        return groupService.getGroupsByLightId(lightId);
-    }
+    /*@RequestMapping("/{lightId}/getGroup")
+    public List<Room> getRoom(@PathVariable("lightId") final long lightId) {
+        LOGGER.debug("Getting room for light {}", lightId);
+        return roomService.getRoomsByLightId(lightId);
+    }*/
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> createOrUpdateLight(@RequestBody final Light light) {

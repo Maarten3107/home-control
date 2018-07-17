@@ -1,13 +1,21 @@
 package be.mmidia.light.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
@@ -15,20 +23,21 @@ import org.joda.time.DateTime;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class LightUsage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    private DateTime startTime;
-    private DateTime endTime;
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp startTime;
 
-    @ManyToOne(targetEntity = Light.class)
-    private long lightId;
+    private Timestamp endTime;
 
-    /*public LightUsage(final String lightId) {
-        this.id = UUID.randomUUID();
-        this.startTime = DateTime.now();
-        this.lightId = lightId;
-    }*/
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "light_id", referencedColumnName = "id", nullable = false)
+    private Light light;
+
+    public LightUsage() {}
 }
