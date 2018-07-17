@@ -1,0 +1,19 @@
+group 'be.mmidia'
+version '0.0.1-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('log4j:log4j:1.2.17')
+    compile('joda-time:joda-time:2.10')
+    compile('junit:junit:4.12')
+    //compile('org.springframework.boot:spring-boot-test')
+    compile('org.hamcrest:java-hamcrest:2.0.0.0')
+    compile('com.google.guava:guava:25.1-jre')
+}
